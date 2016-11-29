@@ -1,2 +1,2 @@
 # dockerfiles
-various dockerfiles
+various dockerfiles made by me and greatly inspired (or copied) from @jessfrazz, ...
