@@ -36,13 +36,23 @@ build_and_push(){
 	fi
 }
 
+function join_by { local IFS="$1"; shift; echo "$*"; }
+
 main(){
 	# get the dockerfiles
 	IFS=$'\n'
-	files=( $(find . -iname '*Dockerfile' | sed 's|./||' | sort) )
+    files=
+    if [ $# -eq 0 ]; then
+	   files=( $(find . -iname '*Dockerfile' | sed 's|./||' | sort) )
+    else
+       selectedpaths=$(join_by '|' $@)
+       files=( $(find . -iname '*Dockerfile' | egrep "$selectedpaths" | sed 's|./||' | sort) )
+    fi
 	unset IFS
 
-	ERRORS=()
+    echo $files
+
+    ERRORS=()
 	# build all dockerfiles
 	for f in "${files[@]}"; do
 		image=${f%Dockerfile}

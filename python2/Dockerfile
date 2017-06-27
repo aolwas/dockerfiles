@@ -1,7 +1,16 @@
 FROM ubuntu:xenial
 
 RUN apt update \
-    && apt install -y sudo vim build-essential python-minimal python-dev python-pip libssl-dev \
+    && apt install -y \
+    sudo \
+    vim \
+    build-essential \
+    python-minimal \
+    python-dev \
+    python-pip \
+    libssl-dev \
+    git \
+    git-review \
     && rm -rf /var/lib/apt/lists/*
 
 RUN adduser --disabled-password --shell /bin/bash --uid 1000 dockuser
