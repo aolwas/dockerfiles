@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  caching-proxy:
+    image: xamoc/squid
+    ports:
+      - "3128:3128"
+    volumes:
+      - squid-cache:/var/cache/squid
+      - squid-log:/var/log/squid
+      - "${PWD}/cert:/etc/squid/ssl_cert"
+    restart: always
+
+volumes:
+  squid-cache:
+  # ssl-cert:
+  squid-log:
