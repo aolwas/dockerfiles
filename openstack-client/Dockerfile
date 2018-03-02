@@ -1,4 +1,4 @@
-FROM xamoc/python2
+FROM aolwas/python2
 
 RUN pip install \
     python-openstackclient \

@@ -4,7 +4,8 @@ set -o pipefail
 
 # Original work from @jessfraz
 
-REPO_URL="${REPO_URL:-xamoc}"
+REPO_URL="${REPO_URL:-aolwas}"
+DCT="${DCT:-false}"
 
 build_and_push(){
 	base=$1
@@ -23,7 +24,7 @@ build_and_push(){
 	# absolutely no reason
 	n=0
 	until [ $n -ge 5 ]; do
-		docker push --disable-content-trust=false ${REPO_URL}/${base}:${suite} && break
+		docker push --disable-content-trust=${DCT} ${REPO_URL}/${base}:${suite} && break
 		echo "Try #$n failed... sleeping for 15 seconds"
 		n=$[$n+1]
 		sleep 15
@@ -32,7 +33,7 @@ build_and_push(){
 	# also push the tag latest for "stable" tags
 	if [[ "$suite" == "stable" ]]; then
 		docker tag ${REPO_URL}/${base}:${suite} ${REPO_URL}/${base}:latest
-		docker push --disable-content-trust=false ${REPO_URL}/${base}:latest
+		docker push --disable-content-trust=${DCT} ${REPO_URL}/${base}:latest
 	fi
 }
 
