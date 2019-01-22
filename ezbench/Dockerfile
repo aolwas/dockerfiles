@@ -3,7 +3,7 @@ FROM ubuntu:bionic
 RUN echo "===> Update packages list..."  && \
     apt update && \
     echo "===> Adding Required runtime..."  && \
-    apt install -y bash python-minimal python-pip ca-certificates gnupg curl wget && \
+    apt install -y bash bash-completion python-minimal python-pip ca-certificates gnupg curl wget && \
     echo "===> Installing Ansible..."  && \
     pip install ansible==2.6.4                && \
     echo "==> Installing boto dependencies into the right version" && \
