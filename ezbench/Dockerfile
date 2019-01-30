@@ -3,7 +3,7 @@ FROM ubuntu:bionic
 RUN echo "===> Update packages list..."  && \
     apt update && \
     echo "===> Adding Required runtime..."  && \
-    apt install -y bash bash-completion python-minimal python-pip ca-certificates gnupg curl wget && \
+    apt install -y zsh python-minimal python-pip ca-certificates gnupg2 curl wget git vim && \
     echo "===> Installing Ansible..."  && \
     pip install ansible==2.6.4                && \
     echo "==> Installing boto dependencies into the right version" && \
@@ -11,7 +11,11 @@ RUN echo "===> Update packages list..."  && \
     echo "==> Installing awscli" && \
     pip install awscli && \
     echo "===> Removing package list..."  && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    echo "===> Install antibody..." && \
+    wget https://github.com/getantibody/antibody/releases/download/v4.1.0/antibody_4.1.0_linux_amd64.deb && \
+    dpkg -i antibody_4.1.0_linux_amd64.deb && \
+    rm -rf antibody_4.1.0_linux_amd64.deb
 
 ENV KUBECTL_VERSION 1.10.11
 ENV KOPS_VERSION 1.10.0
@@ -30,8 +34,8 @@ RUN wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v$
     wget -O /usr/local/bin/mc https://dl.minio.io/client/mc/release/linux-amd64/archive/mc.${MINIO_CLIENT_VERSION} && \
     chmod +x /usr/local/bin/mc
 
-# configure bash and kubeps1
+# configure zsh
 # make sure the package repository is up to date
-RUN sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd
-CMD ["/bin/bash","-i"]
+RUN sed -i -e "s/bin\/bash/bin\/zsh/" /etc/passwd
+CMD ["/bin/zsh","-i"]
 
