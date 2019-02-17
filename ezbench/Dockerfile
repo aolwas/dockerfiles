@@ -3,7 +3,7 @@ FROM ubuntu:bionic
 RUN echo "===> Update packages list..."  && \
     apt update && \
     echo "===> Adding Required runtime..."  && \
-    apt install -y zsh python-minimal python-pip ca-certificates gnupg2 curl wget git vim && \
+    apt install -y zsh locales locales-all python-minimal python-pip ca-certificates gnupg2 curl wget git vim && \
     echo "===> Installing Ansible..."  && \
     pip install ansible==2.6.4                && \
     echo "==> Installing boto dependencies into the right version" && \
@@ -17,6 +17,9 @@ RUN echo "===> Update packages list..."  && \
     dpkg -i antibody_4.1.0_linux_amd64.deb && \
     rm -rf antibody_4.1.0_linux_amd64.deb
 
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
 ENV KUBECTL_VERSION 1.10.11
 ENV KOPS_VERSION 1.10.0
 ENV HELM_VERSION 2.11.0
