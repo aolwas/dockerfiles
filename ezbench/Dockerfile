@@ -17,6 +17,7 @@ RUN echo "===> Update packages list..."  && \
     dpkg -i antibody_4.1.0_linux_amd64.deb && \
     rm -rf antibody_4.1.0_linux_amd64.deb
 
+ENV SHELL /bin/zsh
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
