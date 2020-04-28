@@ -1,0 +1,48 @@
+FROM ubuntu:bionic
+
+RUN echo "===> Update packages list..."  && \
+    apt update && \
+    echo "===> Adding Required runtime..."  && \
+    apt install -y zsh locales locales-all python-minimal python-pip ca-certificates gnupg2 curl wget git vim && \
+    echo "===> Installing Ansible..."  && \
+    pip install ansible==2.6.4                && \
+    echo "==> Installing boto dependencies into the right version" && \
+    pip install boto==2.49.0 boto3==1.9.10 botocore==1.12.10 netaddr==0.7.19 && \
+    echo "==> Installing awscli" && \
+    pip install awscli && \
+    echo "===> Removing package list..."  && \
+    rm -rf /var/lib/apt/lists/* && \
+    echo "===> Install antibody..." && \
+    wget https://github.com/getantibody/antibody/releases/download/v4.1.0/antibody_4.1.0_linux_amd64.deb && \
+    dpkg -i antibody_4.1.0_linux_amd64.deb && \
+    rm -rf antibody_4.1.0_linux_amd64.deb
+
+ENV SHELL /bin/zsh
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+ENV KUBECTL_VERSION 1.15.11
+ENV KOPS_VERSION v1.15.2
+ENV HELM_VERSION 2.14.3
+ENV MINIO_CLIENT_VERSION RELEASE.2018-12-05T22-59-07Z
+ENV RKE_VERSION 1.0.0
+
+RUN wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+    chmod +x ./kubectl && \
+    mv ./kubectl /usr/local/bin/kubectl && \
+    wget -O kops https://github.com/kubernetes/kops/releases/download/${KOPS_VERSION}/kops-linux-amd64 && \
+    chmod +x ./kops && \
+    mv ./kops /usr/local/bin/ && \
+    wget -O get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get && \
+    chmod 700 get_helm.sh && \
+    ./get_helm.sh --version v${HELM_VERSION} && \
+    wget -O /usr/local/bin/mc https://dl.minio.io/client/mc/release/linux-amd64/archive/mc.${MINIO_CLIENT_VERSION} && \
+    chmod +x /usr/local/bin/mc && \
+    wget -O /usr/local/bin/rke https://github.com/rancher/rke/releases/download/v${RKE_VERSION}/rke_linux-amd64 && \
+    chmod +x /usr/local/bin/rke
+
+# configure zsh
+# make sure the package repository is up to date
+RUN sed -i -e "s/bin\/bash/bin\/zsh/" /etc/passwd
+CMD ["/bin/zsh","-i"]
+
